@@ -1,0 +1,107 @@
+package jacksonsbots;
+import robocode.*;
+import java.awt.Color;
+
+import robocode.HitRobotEvent;
+import robocode.HitByBulletEvent;
+import robocode.Robot;
+import robocode.ScannedRobotEvent;
+
+import java.awt.*;
+// API help : http://robocode.sourceforge.net/docs/robocode/robocode/Robot.html
+
+/**
+ * BetterThanYouhahahahahahahahah - a robot by (Jackson Savell)
+ */
+public class BetterThanYouhahahahahahahahah extends Robot
+{
+	int turnDirection = 1; // Clockwise or counterclockwise
+
+	/**
+	 * run: Spin around looking for a target
+	 */
+	public void run() {
+		// Initialization of the robot should be put here
+
+		// After trying out your robot, try uncommenting the import at the top,
+		// and the next line:
+
+		setColors(new Color(212,175,55),new Color(134,38,51),new Color(248,248,255)); // body,gun,radar
+		setBulletColor(new Color(212,175,55));
+		// Robot main loop
+		while(true) {
+			// Replace the next 4 lines with any behavior you would like
+			turnRight(5 * turnDirection);
+		}
+	}
+
+	/**
+	 * onScannedRobot: What to do when you see another robot
+	 */
+	public void onScannedRobot(ScannedRobotEvent e) {
+		// Replace the next line with any behavior you would like
+	if (e.getBearing() >= 0) {
+			turnDirection = 1;
+		} else {
+			turnDirection = -1;
+		}
+
+		turnRight(e.getBearing());
+		ahead(e.getDistance() + 5);
+		scan();
+		
+		fire(3);
+	}
+
+	/**
+	 * onHitByBullet: What to do when you're hit by a bullet
+	 */
+	public void onHitRobot(HitRobotEvent e) {
+		if (e.getBearing() >= 0) {
+			turnDirection = 1;
+		} else {
+			turnDirection = -1;
+		}
+		turnRight(e.getBearing());
+			if (e.getEnergy() > 16) {
+			fire(3);
+		} else if (e.getEnergy() > 10) {
+			fire(2);
+		} else if (e.getEnergy() > 4) {
+			fire(1);
+		} else if (e.getEnergy() > 2) {
+			fire(.5);
+		} else if (e.getEnergy() > .4) {
+			fire(.1);
+		}
+		ahead(40);} // Ram him again!
+	public void onHitByBullet(HitByBulletEvent e) {
+		// Replace the next line with any behavior you would like
+		setDebugProperty("lastHitBy", e.getName() + " with power of bullet " + e.getPower() + " at time " + getTime());
+
+		// show how to remove debugging property
+		setDebugProperty("lastScannedRobot", null);
+			
+
+		Graphics2D g = getGraphics();
+
+		g.setColor(Color.orange);
+		g.drawOval((int) (getX() - 55), (int) (getY() - 55), 110, 110);
+		g.drawOval((int) (getX() - 56), (int) (getY() - 56), 112, 112);
+		g.drawOval((int) (getX() - 59), (int) (getY() - 59), 118, 118);
+		g.drawOval((int) (getX() - 60), (int) (getY() - 60), 120, 120);
+
+		turnLeft(90 - e.getBearing());
+	}
+	
+	/**
+	 * onHitWall: What to do when you hit a wall
+	 */
+	public void onHitWall(HitWallEvent e) {
+		// Replace the next line with any behavior you would like
+		back(20);
+		turnRight(180);
+		ahead(100);
+		
+	}	
+}
